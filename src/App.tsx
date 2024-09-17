@@ -1,33 +1,63 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useEffect, useState } from "react";
+import UserList from "./components/UserList";
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios, { CanceledError } from "axios";
+import UserProfile from "./components/UserProfile";
+
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+  };
+  phone: string;
+  website: string;
+  company: {
+    name: string;
+  };
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [error, setError] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const onClick = (id: number) => {
+    const user = users.find((user) => user.id === id);
+    if (user) {
+      console.log(
+        user.name + " with user name: " + user.username + " is clicked"
+      );
+      setUser(user);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
+      .then((response) => {
+        setUsers(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        if (error instanceof CanceledError) return;
+        setError(error.message);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {loading && <div className="spinner-boarder"></div>}
+      <UserList users={users} onClick={onClick} />
+      {user && <UserProfile {...user} />}
     </>
   );
 }
