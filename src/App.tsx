@@ -57,6 +57,7 @@ function App() {
     <>
       {loading && <div className="spinner-boarder"></div>}
       <UserList users={users} onClick={onClick} />
+      <br />
       {user && <UserProfile {...user} />}
     </>
   );

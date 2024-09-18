@@ -1,38 +1,51 @@
-import React from "react";
-
 interface User {
   id: number;
   name: string;
   username: string;
   email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-  };
 }
 
-const UserProfile = ({ email }: User) => {
+const UserProfile = ({ id, name, username, email }: User) => {
   return (
     <>
-      {" "}
       <div>
         <form>
+          <legend>User Profile</legend>
           <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">
-              Email address
-            </label>
+            <fieldset disabled>
+              <label className="form-label">User ID</label>
+              <input
+                type="text"
+                id="disabledTextInput"
+                className="form-control"
+                placeholder={id.toString()}
+              />
+            </fieldset>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Name</label>
+            <input
+              type="name"
+              className="form-control"
+              id={name}
+              placeholder={name}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Username</label>
+            <input
+              type="username"
+              className="form-control"
+              id={username}
+              placeholder={username}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Email address</label>
             <input
               type="email"
               className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              id={email}
               placeholder={email}
             />
             <div id="emailHelp" className="form-text">
@@ -40,10 +53,10 @@ const UserProfile = ({ email }: User) => {
             </div>
           </div>
           <button type="submit" className="btn btn-primary">
-            Submit
+            Update
           </button>
         </form>
-      </div>{" "}
+      </div>
     </>
   );
 };
